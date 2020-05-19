@@ -113,8 +113,8 @@ namespace StackTool
                         {
                             s.Write("CalibPoint,");
                             s.Write(componentID + ",0,");
-                            s.Write(c.posX + ",");
-                            s.Write(c.posY + ",");
+                            s.Write(c.posX.ToString().Replace(',', '.') + ",");
+                            s.Write(c.posY.ToString().Replace(',', '.') + ",");
                             s.WriteLine("Mark"+(componentID+1));
                         }
                         break;  //stop - we have placed our calibration points now.

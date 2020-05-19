@@ -307,7 +307,7 @@ namespace StackTool
                             {
                                 for (int i = 0; i < aliases.Length; i++)
                                 {
-                                    Console.Write(aliases[i].Split('-')[0]);
+                                    //Console.Write(aliases[i].Split('-')[0]);
                                     if (c.value.Equals(aliases[i].Split('-')[0]))
                                     {
                                         c.matchingFeederID = reel.feederID; //store the feederID that was matched to this unique component
@@ -317,7 +317,7 @@ namespace StackTool
                                         break;
                                     }
                                 }
-                                Console.WriteLine("");
+                                //Console.WriteLine("");
                             }
 
                         }
