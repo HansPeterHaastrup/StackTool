@@ -32,8 +32,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.reelStatusLabel = new System.Windows.Forms.Label();
             this.machineStack = new System.Windows.Forms.DataGridView();
-            this.feederID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.component = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.feederInfoGroup = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -93,11 +91,24 @@
             this.componentStatusLabel = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.overrideGroup = new System.Windows.Forms.GroupBox();
+            this.overrideNoMountRadio = new System.Windows.Forms.RadioButton();
+            this.overrideReelCombo = new System.Windows.Forms.ComboBox();
+            this.overrideTrayCombo = new System.Windows.Forms.ComboBox();
+            this.overrideTrayRadio = new System.Windows.Forms.RadioButton();
+            this.overrideManualRadio = new System.Windows.Forms.RadioButton();
+            this.overrideAutoRadio = new System.Windows.Forms.RadioButton();
             this.generateDPVFileButton = new System.Windows.Forms.Button();
-            this.MatchingParts = new System.Windows.Forms.DataGridView();
+            this.matchingParts = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.overrides = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openComponentDataDialog = new System.Windows.Forms.OpenFileDialog();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.feederID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.component = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pack = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.machineStack)).BeginInit();
             this.feederInfoGroup.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -111,7 +122,8 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uniquePartsDataView)).BeginInit();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MatchingParts)).BeginInit();
+            this.overrideGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.matchingParts)).BeginInit();
             this.SuspendLayout();
             // 
             // openReelDataDialog
@@ -148,7 +160,8 @@
             this.machineStack.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.machineStack.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.feederID,
-            this.component});
+            this.component,
+            this.pack});
             this.machineStack.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.machineStack.Location = new System.Drawing.Point(9, 35);
             this.machineStack.MultiSelect = false;
@@ -166,21 +179,6 @@
             this.machineStack.DragOver += new System.Windows.Forms.DragEventHandler(this.machineStack_DragOver);
             this.machineStack.MouseDown += new System.Windows.Forms.MouseEventHandler(this.machineStack_MouseDown);
             this.machineStack.MouseMove += new System.Windows.Forms.MouseEventHandler(this.machineStack_MouseMove);
-            // 
-            // feederID
-            // 
-            this.feederID.HeaderText = "Feeder ID";
-            this.feederID.Name = "feederID";
-            this.feederID.ReadOnly = true;
-            this.feederID.Width = 79;
-            // 
-            // component
-            // 
-            this.component.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.component.HeaderText = "Component";
-            this.component.Name = "component";
-            this.component.ReadOnly = true;
-            this.component.Width = 150;
             // 
             // feederInfoGroup
             // 
@@ -758,14 +756,113 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label19);
+            this.tabPage3.Controls.Add(this.label18);
+            this.tabPage3.Controls.Add(this.overrideGroup);
             this.tabPage3.Controls.Add(this.generateDPVFileButton);
-            this.tabPage3.Controls.Add(this.MatchingParts);
+            this.tabPage3.Controls.Add(this.matchingParts);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(666, 775);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Matching parts";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // overrideGroup
+            // 
+            this.overrideGroup.Controls.Add(this.overrideNoMountRadio);
+            this.overrideGroup.Controls.Add(this.overrideReelCombo);
+            this.overrideGroup.Controls.Add(this.overrideTrayCombo);
+            this.overrideGroup.Controls.Add(this.overrideTrayRadio);
+            this.overrideGroup.Controls.Add(this.overrideManualRadio);
+            this.overrideGroup.Controls.Add(this.overrideAutoRadio);
+            this.overrideGroup.Location = new System.Drawing.Point(453, 33);
+            this.overrideGroup.Name = "overrideGroup";
+            this.overrideGroup.Size = new System.Drawing.Size(200, 184);
+            this.overrideGroup.TabIndex = 12;
+            this.overrideGroup.TabStop = false;
+            this.overrideGroup.Text = "Overrides";
+            // 
+            // overrideNoMountRadio
+            // 
+            this.overrideNoMountRadio.AutoSize = true;
+            this.overrideNoMountRadio.Location = new System.Drawing.Point(7, 43);
+            this.overrideNoMountRadio.Name = "overrideNoMountRadio";
+            this.overrideNoMountRadio.Size = new System.Drawing.Size(83, 17);
+            this.overrideNoMountRadio.TabIndex = 5;
+            this.overrideNoMountRadio.TabStop = true;
+            this.overrideNoMountRadio.Text = "Don\'t Mount";
+            this.overrideNoMountRadio.UseVisualStyleBackColor = true;
+            this.overrideNoMountRadio.CheckedChanged += new System.EventHandler(this.noMountRadio_CheckedChanged);
+            // 
+            // overrideReelCombo
+            // 
+            this.overrideReelCombo.Enabled = false;
+            this.overrideReelCombo.FormattingEnabled = true;
+            this.overrideReelCombo.Location = new System.Drawing.Point(7, 89);
+            this.overrideReelCombo.Name = "overrideReelCombo";
+            this.overrideReelCombo.Size = new System.Drawing.Size(187, 21);
+            this.overrideReelCombo.TabIndex = 4;
+            // 
+            // overrideTrayCombo
+            // 
+            this.overrideTrayCombo.Enabled = false;
+            this.overrideTrayCombo.FormattingEnabled = true;
+            this.overrideTrayCombo.Items.AddRange(new object[] {
+            "Front Tray 60",
+            "Front Tray 61",
+            "Front Tray 62",
+            "Front Tray 63",
+            "Front Tray 64",
+            "Front Tray 65",
+            "Front Tray 66",
+            "Front Tray 67",
+            "Front Tray 68",
+            "Front Tray 69",
+            "Front Tray 70",
+            "Front Tray 71",
+            "Front Tray 72",
+            "Front Tray 73"});
+            this.overrideTrayCombo.Location = new System.Drawing.Point(7, 139);
+            this.overrideTrayCombo.Name = "overrideTrayCombo";
+            this.overrideTrayCombo.Size = new System.Drawing.Size(187, 21);
+            this.overrideTrayCombo.TabIndex = 3;
+            this.overrideTrayCombo.SelectedIndexChanged += new System.EventHandler(this.overrideTrayCombo_SelectedIndexChanged);
+            // 
+            // overrideTrayRadio
+            // 
+            this.overrideTrayRadio.AutoSize = true;
+            this.overrideTrayRadio.Location = new System.Drawing.Point(7, 116);
+            this.overrideTrayRadio.Name = "overrideTrayRadio";
+            this.overrideTrayRadio.Size = new System.Drawing.Size(65, 17);
+            this.overrideTrayRadio.TabIndex = 2;
+            this.overrideTrayRadio.Text = "Set Tray";
+            this.overrideTrayRadio.UseVisualStyleBackColor = true;
+            this.overrideTrayRadio.CheckedChanged += new System.EventHandler(this.overrideTrayRadio_CheckedChanged);
+            // 
+            // overrideManualRadio
+            // 
+            this.overrideManualRadio.AutoSize = true;
+            this.overrideManualRadio.Location = new System.Drawing.Point(6, 66);
+            this.overrideManualRadio.Name = "overrideManualRadio";
+            this.overrideManualRadio.Size = new System.Drawing.Size(98, 17);
+            this.overrideManualRadio.TabIndex = 1;
+            this.overrideManualRadio.Text = "Set manual reel";
+            this.overrideManualRadio.UseVisualStyleBackColor = true;
+            this.overrideManualRadio.CheckedChanged += new System.EventHandler(this.overrideManualRadio_CheckedChanged);
+            // 
+            // overrideAutoRadio
+            // 
+            this.overrideAutoRadio.AutoSize = true;
+            this.overrideAutoRadio.Checked = true;
+            this.overrideAutoRadio.Location = new System.Drawing.Point(7, 20);
+            this.overrideAutoRadio.Name = "overrideAutoRadio";
+            this.overrideAutoRadio.Size = new System.Drawing.Size(111, 17);
+            this.overrideAutoRadio.TabIndex = 0;
+            this.overrideAutoRadio.TabStop = true;
+            this.overrideAutoRadio.Text = "Auto / No change";
+            this.overrideAutoRadio.UseVisualStyleBackColor = true;
+            this.overrideAutoRadio.CheckedChanged += new System.EventHandler(this.overrideAutoRadio_CheckedChanged);
             // 
             // generateDPVFileButton
             // 
@@ -777,34 +874,84 @@
             this.generateDPVFileButton.UseVisualStyleBackColor = true;
             this.generateDPVFileButton.Click += new System.EventHandler(this.generateDPVFileButton_Click);
             // 
-            // MatchingParts
+            // matchingParts
             // 
-            this.MatchingParts.AllowUserToAddRows = false;
-            this.MatchingParts.AllowUserToDeleteRows = false;
-            this.MatchingParts.AllowUserToResizeRows = false;
-            this.MatchingParts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.MatchingParts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.matchingParts.AllowUserToAddRows = false;
+            this.matchingParts.AllowUserToDeleteRows = false;
+            this.matchingParts.AllowUserToResizeRows = false;
+            this.matchingParts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.matchingParts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3});
-            this.MatchingParts.Location = new System.Drawing.Point(3, 33);
-            this.MatchingParts.Name = "MatchingParts";
-            this.MatchingParts.Size = new System.Drawing.Size(660, 704);
-            this.MatchingParts.TabIndex = 10;
+            this.dataGridViewTextBoxColumn3,
+            this.overrides});
+            this.matchingParts.Location = new System.Drawing.Point(3, 33);
+            this.matchingParts.Name = "matchingParts";
+            this.matchingParts.Size = new System.Drawing.Size(444, 704);
+            this.matchingParts.TabIndex = 10;
+            this.matchingParts.SelectionChanged += new System.EventHandler(this.MatchingParts_SelectionChanged);
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.HeaderText = "Value";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
             // dataGridViewTextBoxColumn3
             // 
             this.dataGridViewTextBoxColumn3.HeaderText = "Package";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 300;
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.Width = 200;
+            // 
+            // overrides
+            // 
+            this.overrides.HeaderText = "Overrides";
+            this.overrides.Name = "overrides";
+            this.overrides.ReadOnly = true;
             // 
             // openComponentDataDialog
             // 
             this.openComponentDataDialog.Filter = "KiCad .pos files|*.pos";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(483, 262);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(41, 13);
+            this.label18.TabIndex = 13;
+            this.label18.Text = "label18";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(486, 318);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(41, 13);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "label19";
+            // 
+            // feederID
+            // 
+            this.feederID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.feederID.HeaderText = "Feeder ID";
+            this.feederID.Name = "feederID";
+            this.feederID.ReadOnly = true;
+            this.feederID.Width = 60;
+            // 
+            // component
+            // 
+            this.component.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.component.HeaderText = "Component";
+            this.component.Name = "component";
+            this.component.ReadOnly = true;
+            // 
+            // pack
+            // 
+            this.pack.HeaderText = "Package";
+            this.pack.Name = "pack";
+            this.pack.ReadOnly = true;
+            this.pack.Width = 75;
             // 
             // Form1
             // 
@@ -836,7 +983,10 @@
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uniquePartsDataView)).EndInit();
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.MatchingParts)).EndInit();
+            this.tabPage3.PerformLayout();
+            this.overrideGroup.ResumeLayout(false);
+            this.overrideGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.matchingParts)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -849,8 +999,6 @@
         private System.Windows.Forms.DataGridView machineStack;
         private System.Windows.Forms.GroupBox feederInfoGroup;
         private System.Windows.Forms.Label feederIDLabel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn feederID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn component;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox feederOffsetX;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -909,10 +1057,23 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.DataGridView MatchingParts;
+        private System.Windows.Forms.DataGridView matchingParts;
+        private System.Windows.Forms.Button generateDPVFileButton;
+        private System.Windows.Forms.GroupBox overrideGroup;
+        private System.Windows.Forms.RadioButton overrideTrayRadio;
+        private System.Windows.Forms.RadioButton overrideManualRadio;
+        private System.Windows.Forms.RadioButton overrideAutoRadio;
+        private System.Windows.Forms.ComboBox overrideTrayCombo;
+        private System.Windows.Forms.ComboBox overrideReelCombo;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.Button generateDPVFileButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn overrides;
+        private System.Windows.Forms.RadioButton overrideNoMountRadio;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.DataGridViewTextBoxColumn feederID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn component;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pack;
     }
 }
 

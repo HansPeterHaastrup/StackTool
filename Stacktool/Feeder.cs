@@ -20,6 +20,8 @@ namespace StackTool
         public ushort feederID = 0;
         public tapeSize width = tapeSize.width_8mm;
         public string component;
+        public string value;
+        public string package;
         public string alias;
 
         public short speed,head,feedSpacing;

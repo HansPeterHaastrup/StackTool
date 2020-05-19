@@ -69,7 +69,7 @@ namespace StackTool
             int componentID = 0;
             foreach(Component uc in _uniqueParts)
             {
-                if (uc.isPlaced)
+                if (uc.isPlaced && !uc.isoverridden)
                 {
                     foreach (Component c in uc.ofSameType)
                     {

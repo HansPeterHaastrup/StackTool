@@ -13,6 +13,7 @@ namespace StackTool
         public string designator, value, package;
         public decimal posX, posY, rotation;
         public bool isPlaced = false;   //if indicates if the component is matched to a unique part / if a unique part indicates that part is matched to a feeder
+        public bool isoverridden = false;
 
 
         //members below is used only when working on uniqueParts (unique parts is a collection of the same type of parts)

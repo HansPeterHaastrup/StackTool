@@ -59,9 +59,6 @@ namespace StackTool
                 //now we got a line with reel parameters
                 string[] parameters = line.Split(',');  //split into array
 
-                //populate the main info for the stack list here - feeder ID and component name. 
-                machineStack.Rows.Add(new string[] { parameters[1], parameters[2]});
-
                 //now create an instance of the reel in the reel stack
                 ushort i;
                 if(ushort.TryParse(parameters[1],out i))
@@ -69,7 +66,16 @@ namespace StackTool
                 else
                     reelStack.Add(new Feeder { feederID = 0 });
                 //now we have a feeder to enter the rest of the information in to..
-                reelStack[reelStack.Count-1].component = parameters[2];
+                reelStack[reelStack.Count-1].component = parameters[2]; //parameter 2 is value, package and maybe voltage..
+
+                //try to find out the package and value for the feeder
+                if (reelStack[reelStack.Count - 1].component.Length > 0)
+                {
+                    reelStack[reelStack.Count - 1].value = reelStack[reelStack.Count - 1].component.Split('-')[0];
+                    reelStack[reelStack.Count - 1].package = reelStack[reelStack.Count - 1].component.Split('-')[1].Split(' ')[0];
+                }
+
+                //next we just parse all the parameters from the .csv file. Take care to handle '.' and ',' situations...
                 float.TryParse(parameters[3], NumberStyles.Any, CultureInfo.InvariantCulture, out reelStack[reelStack.Count - 1].xOffset);
                 float.TryParse(parameters[4], NumberStyles.Any, CultureInfo.InvariantCulture, out reelStack[reelStack.Count - 1].yOffset);
                 float.TryParse(parameters[5], NumberStyles.Any, CultureInfo.InvariantCulture, out reelStack[reelStack.Count - 1].height);
@@ -89,7 +95,10 @@ namespace StackTool
                 reelStack[reelStack.Count - 1].alias = parameters[15];
                 reelStack[reelStack.Count - 1].orderNumber = parameters[16];
                 reelStack[reelStack.Count - 1].supplier = parameters[17];
-                reelStack[reelStack.Count - 1].notes = parameters[18];   
+                reelStack[reelStack.Count - 1].notes = parameters[18];
+
+                //populate the main info for the stack list here - feeder ID, component value and pacakge. 
+                machineStack.Rows.Add(new string[] { reelStack[reelStack.Count - 1].feederID.ToString(), reelStack[reelStack.Count - 1].value, reelStack[reelStack.Count - 1].package });
             }
             s.Close();
         }
@@ -288,37 +297,42 @@ namespace StackTool
                     //Console.WriteLine("Component Start: " +c.value);
                     foreach (Feeder reel in reelStack)  //we can go through all the reels in our search for the matching part
                     {
-                        //Console.Write("Trying to match: " + reel.component.Split('-')[0] + " with: " + c.value);
-                        //We start by looking at the values of the components. and the aliases!
+                        Console.Write(c.designator + ": Trying to match: " + reel.component.Split('-')[0] + " with: " + c.value);
 
-                        if (c.value.Equals(reel.component.Split('-')[0]))    //the values are matching. add to the possibleMatches list
+                        if (reel.component.Length > 1)     //no need to look in empty feeders
                         {
-                            //Console.WriteLine("MATCH");
-                            c.matchingFeederID = reel.feederID; //store the feederID that was matched to this unique component
-                            MatchingParts.Rows.Add(c.value, reel.component);
-                            reel.usedInDesign = true;
-                            c.isPlaced = true;
-                            break;
-                        }
-                        else        // no match is found, try the aliases
-                        {
-                            string[] aliases = reel.alias.Split(':');
-                            if (aliases.Length > 0)    //if there are aliases to look through
+
+                            //We start by looking at the values of the components
+                            if (c.value.Equals(reel.component.Split('-')[0]))    //the values are matching. add to the list
                             {
-                                for (int i = 0; i < aliases.Length; i++)
-                                {
-                                    //Console.Write(aliases[i].Split('-')[0]);
-                                    if (c.value.Equals(aliases[i].Split('-')[0]))
-                                    {
-                                        c.matchingFeederID = reel.feederID; //store the feederID that was matched to this unique component
-                                        MatchingParts.Rows.Add(c.value, reel.component);
-                                        reel.usedInDesign = true;
-                                        c.isPlaced = true;
-                                        break;
-                                    }
-                                }
-                                //Console.WriteLine("");
+                                Console.WriteLine(" - MATCH");
+                                c.matchingFeederID = reel.feederID; //store the feederID that was matched to this unique component
+                                matchingParts.Rows.Add(c.value, reel.component, "Auto");
+                                reel.usedInDesign = true;
+                                c.isPlaced = true;
+                                break;
                             }
+                            else        // no match is found, try the aliases
+                            {
+                                string[] aliases = reel.alias.Split(':');
+                                if (aliases.Length > 0)    //if there are aliases to look through
+                                {
+                                    for (int i = 0; i < aliases.Length; i++)
+                                    {
+                                        //Console.Write(aliases[i].Split('-')[0]);
+                                        if (c.value.Equals(aliases[i].Split('-')[0]))
+                                        {
+                                            c.matchingFeederID = reel.feederID; //store the feederID that was matched to this unique component
+                                            matchingParts.Rows.Add(c.value, reel.component, "Auto");
+                                            reel.usedInDesign = true;
+                                            c.isPlaced = true;
+                                            break;
+                                        }
+                                    }
+                                    Console.WriteLine("");
+                                }
+                            }
+
 
                         }
                     }
@@ -326,16 +340,96 @@ namespace StackTool
                 //if the matchingFeederID is still not set we haven't matched the component at all
                 if(c.matchingFeederID<0)
                 {
-                    MatchingParts.Rows.Add(c.value, "No Mount");
+                    matchingParts.Rows.Add(c.value, "No Match", "No Mount");
                 }
             }
         }
 
         private void generateDPVFileButton_Click(object sender, EventArgs e)
         {
+            // first we change the unique parts to reflect the overrides requests
+            for (int i=0;i<uniqueParts.Count;i++)
+            {
+                
+                if(matchingParts.Rows[i].Cells[2].Value.ToString()=="No Mount")
+                {
+                    uniqueParts[i].isoverridden = true;
+                }
+                if (matchingParts.Rows[i].Cells[2].Value.ToString() == "Auto")
+                {
+                    uniqueParts[i].isoverridden = false;
+                }
+            }
+
             string fileName = openComponentDataDialog.SafeFileName.Split('.')[0];
             dpvGenerator gen = new dpvGenerator(fileName+".dpv", reelStack, uniqueParts);
             gen.generateData(openComponentDataDialog.SafeFileName.Split('.')[0]);
         }
+
+        private void overrideTrayRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            overrideTrayCombo.Enabled = true;
+            overrideReelCombo.Enabled = false;
+            updateOverrides();
+        }
+
+        private void overrideAutoRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            // no changes should be allowed - disable all manual controls!
+            overrideReelCombo.Enabled = false;
+            overrideTrayCombo.Enabled = false;
+            updateOverrides();
+        }
+        private void noMountRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            overrideReelCombo.Enabled = false;
+            overrideTrayCombo.Enabled = false;
+            updateOverrides();
+        }
+
+        private void overrideManualRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            overrideReelCombo.Enabled = true;
+            overrideTrayCombo.Enabled = false;
+            updateOverrides();
+        }
+
+        int uniquePartSelected = -1;
+        private void MatchingParts_SelectionChanged(object sender, EventArgs e)
+        {
+            uniquePartSelected = matchingParts.SelectedCells[0].RowIndex;
+            label18.Text = uniquePartSelected.ToString();
+        }
+
+        private void updateOverrides()
+        {
+            if(uniquePartSelected>-1)   //a row have been selected
+            {
+                if(overrideAutoRadio.Checked)   //auto is selected
+                {
+                    matchingParts.Rows[uniquePartSelected].Cells[2].Value = "Auto";
+                }
+                if(overrideNoMountRadio.Checked)
+                {
+                    matchingParts.Rows[uniquePartSelected].Cells[2].Value = "No Mount";
+                }
+
+                if(overrideManualRadio.Checked)
+                {
+                    matchingParts.Rows[uniquePartSelected].Cells[2].Value = "Manual reel";
+                }
+                if(overrideTrayRadio.Checked)
+                {
+                    matchingParts.Rows[uniquePartSelected].Cells[2].Value = overrideTrayCombo.SelectedItem;
+                }
+            }
+        }
+
+        private void overrideTrayCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateOverrides();
+        }
+
+
     }
 }
